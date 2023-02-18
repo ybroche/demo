@@ -1,0 +1,37 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="202302171500" author="Yunier">
+        <createTable tableName="person">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="person_id_pk"/>
+            </column>
+            <column name="name" type="varchar(250)"/>
+            <column name="email" type="varchar(250)"/>
+            <column name="password" type="varchar(250)"/>
+            <column name="created" type="timestamp" defaultValueComputed="now()"/>
+            <column name="modified" type="timestamp" defaultValueComputed="now()"/>
+            <column name="last_login" type="timestamp" defaultValueComputed="now()"/>
+            <column name="uuid" type="varchar(250)"/>
+            <column name="is_active" type="bool"/>
+        </createTable>
+        <createTable tableName="phone">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="phone_id_pk"/>
+            </column>
+            <column name="number" type="bigint"/>
+            <column name="city_code" type="smallint"/>
+            <column name="country_code" type="smallint"/>
+            <column name="person_id" type="bigint">
+                <constraints nullable="false" notNullConstraintName="phone_person_id_nn"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="person" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <addAutoIncrement tableName="phone" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
+        <addForeignKeyConstraint baseTableName="phone" baseColumnNames="person_id" constraintName="phone_person_id_fk"
+                                 referencedTableName="person" referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
